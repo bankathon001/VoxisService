@@ -101,7 +101,7 @@ public class VoiceService {
         try {
             authenticateVoiceRequest.setBase64EncodeSpeech(voiceSamples.getRecord().get(authenticateVoiceRequest.getMobileNumber()));
             JsonNode authenticate = apiCaller.voiceAuthenticate(profileId,authenticateVoiceRequest);
-            if("accept".equalsIgnoreCase(authenticate.get("recognitionResult").toString())){
+            if("accept".equalsIgnoreCase(authenticate.get("recognitionResult").asText())){
                 return VoiceAuthenticateStatus.ACCEPTED;
             }
             return VoiceAuthenticateStatus.NOT_ACCEPTED;
