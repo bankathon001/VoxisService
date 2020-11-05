@@ -41,6 +41,7 @@ public class VoiceService {
 
     @PostConstruct
     public void init(){
+        csvService.write(new String[]{"2345343234","sdsdshsdsdsdsddjhsjd"});
       List<String[]> profileNumber = csvService.get();
       for(String[] i : profileNumber){
           mobileProfileMap.put(i[0],i[1]);
