@@ -1,18 +1,22 @@
 package com.axis.VoxisService.controller;
 
 import com.axis.VoxisService.enums.RegisteredVoiceStatus;
+import com.axis.VoxisService.enums.ValidatePinStatus;
 import com.axis.VoxisService.enums.VoiceAuthenticateStatus;
 import com.axis.VoxisService.exception.VoaxisException;
 import com.axis.VoxisService.request.AuthenticateVoiceRequest;
 import com.axis.VoxisService.request.RegisteredVoiceRequest;
+import com.axis.VoxisService.request.ValidatePinRequest;
 import com.axis.VoxisService.response.ServiceResponse;
 import com.axis.VoxisService.response.SpeechToTextResponse;
 import com.axis.VoxisService.response.TextToSpeechResponse;
 import com.axis.VoxisService.service.AccountService;
 import com.axis.VoxisService.service.VoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -100,6 +104,15 @@ public class VoiceController {
         response.setBody(balance);
         return response;
 
+    }
+
+    @PostMapping(value = "v1/validate-pin")
+    public ServiceResponse<ValidatePinStatus, VoaxisException> validateDebitCard(
+            @RequestBody @Valid ValidatePinRequest validatePinRequest) {
+        ValidatePinStatus validateDebitCard =  accountService.validateDebitCard(validatePinRequest);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody(validateDebitCard);
+        return response;
     }
 
 }
