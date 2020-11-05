@@ -94,7 +94,7 @@ public class VoiceService {
     }
 
     public VoiceAuthenticateStatus authenticateVoice(@NotNull AuthenticateVoiceRequest authenticateVoiceRequest) {
-        String profileId = mobileProfileMap.get(authenticateVoiceRequest);
+        String profileId = mobileProfileMap.get(authenticateVoiceRequest.getMobileNumber());
         if(StringUtils.isEmpty(profileId)){
             return VoiceAuthenticateStatus.PROFILE_NOT_FOUND;
         }
