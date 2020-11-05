@@ -1,6 +1,7 @@
 package com.axis.VoxisService.service;
 
 import com.axis.VoxisService.ApiCaller;
+import com.axis.VoxisService.config.VoiceSamples;
 import com.axis.VoxisService.enums.RegisteredVoiceStatus;
 import com.axis.VoxisService.enums.VoiceAuthenticateStatus;
 import com.axis.VoxisService.request.AuthenticateVoiceRequest;
@@ -37,12 +38,18 @@ public class VoiceService {
     @Autowired
     private CSVService csvService;
 
+    @Value("${csv.file.path}")
+    private String RegisteredUserpath;
+
+    @Autowired
+    private VoiceSamples voiceSamples;
+
     private final Map<String,String> mobileProfileMap = new HashMap<>();
 
     @PostConstruct
     public void init(){
-        csvService.write(new String[]{"2345343234","sdsdshsdsdsdsddjhsjd"});
-      List<String[]> profileNumber = csvService.get();
+        csvService.write(new String[]{"9582340663","93c882d5-fdcd-47a6-983d-c31d67ff2b38"},RegisteredUserpath);
+      List<String[]> profileNumber = csvService.get(RegisteredUserpath);
       for(String[] i : profileNumber){
           mobileProfileMap.put(i[0],i[1]);
       }
@@ -72,10 +79,11 @@ public class VoiceService {
         if(StringUtils.isEmpty(profileId)) {
             JsonNode profile = apiCaller.createProfile(registeredVoiceRequest.getMobileNumber());
             profileId = profile.get("profileId").toString();
-            csvService.write(new String[]{registeredVoiceRequest.getMobileNumber(),profileId});
+            csvService.write(new String[]{registeredVoiceRequest.getMobileNumber(),profileId},RegisteredUserpath);
         }
         for(int i = 0;i<3;i++) {
             try {
+                registeredVoiceRequest.setBase64EncodeSpeech(voiceSamples.getRecord().get(registeredVoiceRequest.getMobileNumber()));
                 apiCaller.createEnrollment(profileId, registeredVoiceRequest);
             }catch (Exception e){
                 return RegisteredVoiceStatus.NOT_REGISTERED;
@@ -91,6 +99,7 @@ public class VoiceService {
             return VoiceAuthenticateStatus.PROFILE_NOT_FOUND;
         }
         try {
+            authenticateVoiceRequest.setBase64EncodeSpeech(voiceSamples.getRecord().get(authenticateVoiceRequest.getMobileNumber()));
             JsonNode authenticate = apiCaller.voiceAuthenticate(profileId,authenticateVoiceRequest);
             if("accept".equalsIgnoreCase(authenticate.get("recognitionResult").toString())){
                 return VoiceAuthenticateStatus.ACCEPTED;

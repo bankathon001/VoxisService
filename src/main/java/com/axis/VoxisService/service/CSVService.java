@@ -13,10 +13,7 @@ import java.util.List;
 @Component
 public class CSVService {
 
-    @Value("${csv.file.path}")
-    private String path;
-
-    public List<String[]> get() {
+    public List<String[]> get(String path) {
         List list = new ArrayList();
         try(CSVReader reader = new CSVReader(new FileReader(path))) {
             list = reader.readAll();
@@ -25,7 +22,7 @@ public class CSVService {
         return list;
     }
 
-    public void write(String[] record){
+    public void write(String[] record,String path){
         try(CSVWriter writer = new CSVWriter(new FileWriter(path))) {
             writer.writeNext(record);
         }catch (Exception e){
