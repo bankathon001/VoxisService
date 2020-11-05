@@ -39,9 +39,9 @@ public class VoiceController {
         return response;
     }
 
-    @PostMapping(value = "v1/registered-voice")
-    public ServiceResponse<RegisteredVoiceStatus, VoaxisException> speechToText(
-            @RequestParam @Valid final RegisteredVoiceRequest registeredVoiceRequest) {
+    @PostMapping(value = "v1/register-voice")
+    public ServiceResponse<RegisteredVoiceStatus, VoaxisException> registeredVoice(
+            @RequestBody @Valid final RegisteredVoiceRequest registeredVoiceRequest) {
         RegisteredVoiceStatus registeredVoiceStatus = voiceService.registeredVoice(registeredVoiceRequest);
         ServiceResponse response = new ServiceResponse();
         response.setBody(registeredVoiceStatus);
@@ -56,5 +56,24 @@ public class VoiceController {
         response.setBody(voiceAuthenticateStatus);
         return response;
     }
+
+    @PostMapping(value = "v1/is-registered")
+    public ServiceResponse<Boolean, VoaxisException> isRegistered(@RequestParam @Valid final String mobileNumber) {
+        Boolean voiceRegisStatus = voiceService.isRegistered(mobileNumber);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody(voiceRegisStatus);
+        return response;
+    }
+
+    @PostMapping(value = "v1/generate-capta")
+    public ServiceResponse<String, VoaxisException> generateCaptcha(
+            @RequestParam @Valid final String mobileNumber) {
+        String captcha = voiceService.generateCaptcha(mobileNumber);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody(captcha);
+        return response;
+    }
+
+
 
 }
