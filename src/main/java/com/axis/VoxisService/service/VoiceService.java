@@ -102,7 +102,9 @@ public class VoiceService {
     }
 
     public boolean isRegistered(@NotNull @NotBlank final String mobileNumber) {
-        return apiCaller.isRegistered(mobileNumber);
+        if(mobileProfileMap.get(mobileNumber)!=null)
+            return true;
+        return false;
     }
 
     public String generateCaptcha(@NotNull @NotBlank final String mobileNumber) {
