@@ -60,16 +60,34 @@ public class VoiceService {
         String profileId = null;
         profileId = mobileProfileMap.get(registeredVoiceRequest.getMobileNumber());
         if(StringUtils.isEmpty(profileId)) {
-            JsonNode jsonNode = apiCaller.createProfile(registeredVoiceRequest.getMobileNumber());
-            profileId = jsonNode.get("profileId").toString();
+            JsonNode profile = apiCaller.createProfile(registeredVoiceRequest.getMobileNumber());
+            profileId = profile.get("profileId").toString();
             mobileProfileMap.put(registeredVoiceRequest.getMobileNumber(),profileId);
         }
-        apiCaller.createEnrollment(profileId);
-        return null;
+        for(int i = 0;i<3;i++) {
+            try {
+                apiCaller.createEnrollment(profileId, registeredVoiceRequest);
+            }catch (Exception e){
+                return RegisteredVoiceStatus.NOT_REGISTERED;
+            }
+        }
+        return RegisteredVoiceStatus.REGISTERED;
     }
 
-    public VoiceAuthenticateStatus authenticateVoice(AuthenticateVoiceRequest authenticateVoiceRequest) {
-        return null;
+    public VoiceAuthenticateStatus authenticateVoice(@NotNull AuthenticateVoiceRequest authenticateVoiceRequest) {
+        String profileId = mobileProfileMap.get(authenticateVoiceRequest);
+        if(StringUtils.isEmpty(profileId)){
+            return VoiceAuthenticateStatus.PROFILE_NOT_FOUND;
+        }
+        try {
+            JsonNode authenticate = apiCaller.voiceAuthenticate(profileId,authenticateVoiceRequest);
+            if("accept".equalsIgnoreCase(authenticate.get("recognitionResult").toString())){
+                return VoiceAuthenticateStatus.ACCEPTED;
+            }
+            return VoiceAuthenticateStatus.NOT_ACCEPTED;
+        }catch (Exception e){
+            return VoiceAuthenticateStatus.REPEAT_PROCESS;
+        }
     }
 
     public boolean isRegistered(@NotNull @NotBlank final String mobileNumber) {

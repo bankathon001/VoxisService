@@ -4,5 +4,6 @@ public enum  VoiceAuthenticateStatus {
 
     ACCEPTED,
     NOT_ACCEPTED,
-    REPEAT_THE_PROCESS;
+    PROFILE_NOT_FOUND,
+    REPEAT_PROCESS;
 }

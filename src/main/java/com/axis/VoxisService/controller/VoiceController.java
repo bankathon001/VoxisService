@@ -8,11 +8,13 @@ import com.axis.VoxisService.request.RegisteredVoiceRequest;
 import com.axis.VoxisService.response.ServiceResponse;
 import com.axis.VoxisService.response.SpeechToTextResponse;
 import com.axis.VoxisService.response.TextToSpeechResponse;
+import com.axis.VoxisService.service.AccountService;
 import com.axis.VoxisService.service.VoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/voxis/")
@@ -20,6 +22,12 @@ public class VoiceController {
 
     @Autowired
     private VoiceService voiceService;
+
+    @Autowired
+    private AccountService accountService;
+
+    public VoiceController() {
+    }
 
     @PostMapping(value = "v1/text-to-speech")
     public ServiceResponse<TextToSpeechResponse, VoaxisException> textToSpeech(
@@ -74,6 +82,24 @@ public class VoiceController {
         return response;
     }
 
+    @PostMapping(value = "v1/get-balance")
+    public ServiceResponse<String, VoaxisException> balance(
+            @RequestParam @Valid final String mobileNumber) {
+        String balance =  accountService.getBalance(mobileNumber);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody(balance);
+        return response;
 
+    }
+
+    @PostMapping(value = "v1/last-5-txn")
+    public ServiceResponse<List<String>, VoaxisException> last5Txn(
+            @RequestParam @Valid final String mobileNumber) {
+        List<String> balance =  accountService.getLastTXn(mobileNumber);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody(balance);
+        return response;
+
+    }
 
 }
