@@ -16,12 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Future;
 
 @Service
@@ -36,7 +34,18 @@ public class VoiceService {
     @Autowired
     private ApiCaller apiCaller;
 
+    @Autowired
+    private CSVService csvService;
+
     private final Map<String,String> mobileProfileMap = new HashMap<>();
+
+    @PostConstruct
+    public void init(){
+      List<String[]> profileNumber = csvService.get();
+      for(String[] i : profileNumber){
+          mobileProfileMap.put(i[0],i[1]);
+      }
+    }
 
     public TextToSpeechResponse textToSpeech(@NotNull @NotBlank String text) {
         TextToSpeechResponse textToSpeechResponse = new TextToSpeechResponse();
@@ -63,6 +72,7 @@ public class VoiceService {
             JsonNode profile = apiCaller.createProfile(registeredVoiceRequest.getMobileNumber());
             profileId = profile.get("profileId").toString();
             mobileProfileMap.put(registeredVoiceRequest.getMobileNumber(),profileId);
+            csvService.write(new String[]{registeredVoiceRequest.getMobileNumber(),profileId});
         }
         for(int i = 0;i<3;i++) {
             try {
