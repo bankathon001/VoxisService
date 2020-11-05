@@ -29,7 +29,7 @@ public class VoiceController {
     public VoiceController() {
     }
 
-    @PostMapping(value = "v1/text-to-speech")
+    @GetMapping(value = "v1/text-to-speech")
     public ServiceResponse<TextToSpeechResponse, VoaxisException> textToSpeech(
             @RequestParam @Valid final String text) {
         final TextToSpeechResponse textToSpeechResponse = voiceService.textToSpeech(text);
@@ -38,7 +38,7 @@ public class VoiceController {
         return response;
     }
 
-    @PostMapping(value = "v1/speech-to-text")
+    @GetMapping(value = "v1/speech-to-text")
     public ServiceResponse<TextToSpeechResponse, VoaxisException> speechToText(
             @RequestParam @Valid final String base64EncodeSpeech) {
         final SpeechToTextResponse speechToText = voiceService.speechToText(base64EncodeSpeech);
@@ -58,14 +58,14 @@ public class VoiceController {
 
     @PostMapping(value = "v1/authenticate-voice")
     public ServiceResponse<VoiceAuthenticateStatus, VoaxisException> authenticateVoice(
-            @RequestParam @Valid final AuthenticateVoiceRequest authenticateVoiceRequest) {
+            @RequestBody @Valid final AuthenticateVoiceRequest authenticateVoiceRequest) {
         VoiceAuthenticateStatus voiceAuthenticateStatus = voiceService.authenticateVoice(authenticateVoiceRequest);
         ServiceResponse response = new ServiceResponse();
         response.setBody(voiceAuthenticateStatus);
         return response;
     }
 
-    @PostMapping(value = "v1/is-registered")
+    @GetMapping(value = "v1/is-registered")
     public ServiceResponse<Boolean, VoaxisException> isRegistered(@RequestParam @Valid final String mobileNumber) {
         Boolean voiceRegisStatus = voiceService.isRegistered(mobileNumber);
         ServiceResponse response = new ServiceResponse();
@@ -73,7 +73,7 @@ public class VoiceController {
         return response;
     }
 
-    @PostMapping(value = "v1/generate-capta")
+    @GetMapping(value = "v1/generate-capta")
     public ServiceResponse<String, VoaxisException> generateCaptcha(
             @RequestParam @Valid final String mobileNumber) {
         String captcha = voiceService.generateCaptcha(mobileNumber);
@@ -82,7 +82,7 @@ public class VoiceController {
         return response;
     }
 
-    @PostMapping(value = "v1/get-balance")
+    @GetMapping(value = "v1/get-balance")
     public ServiceResponse<String, VoaxisException> balance(
             @RequestParam @Valid final String mobileNumber) {
         String balance =  accountService.getBalance(mobileNumber);
@@ -92,7 +92,7 @@ public class VoiceController {
 
     }
 
-    @PostMapping(value = "v1/last-5-txn")
+    @GetMapping(value = "v1/last-5-txn")
     public ServiceResponse<List<String>, VoaxisException> last5Txn(
             @RequestParam @Valid final String mobileNumber) {
         List<String> balance =  accountService.getLastTXn(mobileNumber);
