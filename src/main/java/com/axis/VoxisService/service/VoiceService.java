@@ -72,7 +72,6 @@ public class VoiceService {
         if(StringUtils.isEmpty(profileId)) {
             JsonNode profile = apiCaller.createProfile(registeredVoiceRequest.getMobileNumber());
             profileId = profile.get("profileId").toString();
-            mobileProfileMap.put(registeredVoiceRequest.getMobileNumber(),profileId);
             csvService.write(new String[]{registeredVoiceRequest.getMobileNumber(),profileId});
         }
         for(int i = 0;i<3;i++) {
@@ -82,6 +81,7 @@ public class VoiceService {
                 return RegisteredVoiceStatus.NOT_REGISTERED;
             }
         }
+        mobileProfileMap.put(registeredVoiceRequest.getMobileNumber(),profileId);
         return RegisteredVoiceStatus.REGISTERED;
     }
 
