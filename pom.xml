@@ -24,6 +24,11 @@
 			<name>Microsoft Cognitive Services Speech Maven Repository</name>
 			<url>https://csspeechstorage.blob.core.windows.net/maven/</url>
 		</repository>
+		<repository>
+			<id>maven-spring-repo</id>
+			<name>Spring Plugins Repository</name>
+			<url>https://repo.spring.io/plugins-release/</url>
+		</repository>
 	</repositories>
 
 
