@@ -20,7 +20,11 @@ public class AccountService {
     }
 
     public List<String> getLastTXn(@NotNull @NotBlank String mobileNumber) {
-        List txn = Lists.newArrayList("Recharge of 100 Rupees","Debit 200 Rupees at atm","Debit 300 Rupees at atm","Debit 1000 Rupees at Mutual fund","Debit 2000 Rupees at amazon");
+        List txn = Lists.newArrayList("Debited Rs 2000 at ATM on 1st November 2020",
+                "Credited Rs 500 at UPI on 2nd November 2020",
+                "Debited Rs 700 at UPI on 3rd November 2020",
+                "Debited Rs 800 at UPI on 4th November 2020",
+                "Credited Rs 900 at UPI on 5h November 2020");
         return txn;
     }
 
