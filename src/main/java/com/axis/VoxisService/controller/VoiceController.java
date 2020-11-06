@@ -124,4 +124,13 @@ public class VoiceController {
         return response;
     }
 
+    @GetMapping(value = "v1/ungisterUser")
+    public ServiceResponse<String, VoaxisException> unregister(
+            @RequestParam String mobile) {
+        voiceService.unregister(mobile);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody("successful");
+        return response;
+    }
+
 }

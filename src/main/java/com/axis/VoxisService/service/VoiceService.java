@@ -142,4 +142,8 @@ public class VoiceService {
     public void toggle(Boolean state) {
         set.set(state);
     }
+
+    public void unregister(@NotNull @NotBlank String mobile) {
+        mobileProfileMap.remove(mobile);
+    }
 }
