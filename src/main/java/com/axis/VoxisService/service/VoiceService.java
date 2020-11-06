@@ -125,11 +125,11 @@ public class VoiceService {
 
     public String generateCaptcha(@NotNull @NotBlank final String mobileNumber) {
         String[] a = new String[]{
-                "I am at bankathon",
-                "Bankathon is a great activity",
-                "Awesome is a word here",
-                "Voice banking is a need of today",
-                "I can do all operations via voice"};
+                "This is a cat",
+                "This is a bat",
+                "I feel lucky",
+                "Voice banking",
+                "I can do"};
         Random random = new Random();
         return a[random.nextInt(a.length)];
     }
