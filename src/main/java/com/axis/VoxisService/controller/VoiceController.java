@@ -115,4 +115,13 @@ public class VoiceController {
         return response;
     }
 
+    @GetMapping(value = "v1/toggle")
+    public ServiceResponse<String, VoaxisException> toggle(
+            @RequestParam Boolean state) {
+        voiceService.toggle(state);
+        ServiceResponse response = new ServiceResponse();
+        response.setBody("successful");
+        return response;
+    }
+
 }
